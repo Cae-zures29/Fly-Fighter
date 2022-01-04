@@ -1,0 +1,41 @@
+from ursina import *
+from direct.stdpy import thread
+
+def loadLevel():
+    app.run()
+
+def showLoadingScreen():
+    global screen
+    screen = Entity(model='quad', texture='assets\BG')
+    thread.start_new_thread(function=loadLevel, args='')
+
+def showLeaderboard():
+    f_score = open(virus_slayer_scoresheet.txt)
+    saved.score= f_score.read()
+    f_score.close()
+    back = Text(text = 'Press spacebar to go back', position=(-.65, .4), origin=(0,0), scale=2,
+                color=color.yellow, background= True)
+    if held_keys['space']:
+        showMenu()
+
+def showInstructions():
+    bg = Entity(model='quad', texture='assets\BG', scale=36, z=1)
+    inst = Text (text ='The player can use the keys W, A, S, D to move'
+                       'W and S to move up and down, while A and D to move left and right respectively. '
+                       'The player also has a weapon that is used to shoot at the incoming targets. '
+                       'The weapon can be fired by pressing the “spacebar” key. '
+                       'Whenever a target is hit, a point is added to the score. '
+                       'If the player collides with a target, it counts as a loss and the game ends. ',  scale= 2, x= -.1,
+                 y= -.2, color = color.dark_gray )
+    back = Text(text = 'Press spacebar to go back', position=(-.65, .4), origin=(0,0), scale=2,
+                color=color.yellow, background= True)
+    if held_keys['space']:
+        showMenu()
+
+def showMenu():
+    play = Button('Play', on_click=showLoadingScreen(), position=(.65, .4), origin=(0,0), scale=2,
+                  color=color.yellow)
+    scor = Button('Leaderboard', on_click=showLeaderboard(), position=(.65, .3), origin=(0,0), scale=2,
+                  color=color.yellow)
+    inst = Button('Instruction', on_click=showInstructions(), position=(.65, .2), origin=(0,0), scale=2,
+                  color=color.yellow)
